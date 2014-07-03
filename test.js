@@ -24,7 +24,7 @@ function DAO() {
 DAO.prototype.getStudents = function(grade) {
 	return this._data;
 };
-// register a class, which will be resolve to a instance of class.
+// register a class, which will be resolved to a instance of class.
 injector.register('dao', DAO);
 
 // Method Injection

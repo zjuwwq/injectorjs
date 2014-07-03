@@ -36,13 +36,14 @@ function DAO() {
 DAO.prototype.getStudents = function(grade) {
 	return this._data;
 };
-// register a class, which will be resolve to a instance of class.
+// register a class, which will be resolved to a instance of class.
 injector.register('dao', DAO);
 ```
 ### Method Injection
 All dependencies must be at the end of the paramter list, which are prefixed with a dollar sign($).
 
 - depend on object
+
 when resolve, inject the object
 
 ``` javascript
@@ -61,6 +62,7 @@ keys({
 ```
 
 - depend on class(constructor)
+
 when resolve, inject the object that is instantiated by the class
 
 ``` javascript
