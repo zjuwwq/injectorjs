@@ -95,7 +95,7 @@
 				}
 			});
 
-			return fn.apply({}, Array.prototype.slice.call(arguments).concat(injects));
+			return fn.apply(this, Array.prototype.slice.call(arguments).concat(injects));
 		}
 
 		injectedFn.$injects = fn.$injects || $injects;

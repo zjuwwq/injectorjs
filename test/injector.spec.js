@@ -20,7 +20,7 @@ describe('dependency injection', function() {
 			}
 		}
 	};
-	it('method injection', function() {
+	it('Method injection', function() {
 		injector.register('util0', util0);
 		injector.register('util1', util1);
 		var keys = injector.resolve(function(obj, $util0, $util1) {
@@ -40,7 +40,7 @@ describe('dependency injection', function() {
 			age: 30
 		})).toEqual('NAME,AGE');
 	});
-	it('constructor injection', function() {
+	it('Constructor injection', function() {
 		function DAO() {
 			this._data = [{
 				name: 'tom',
@@ -74,6 +74,10 @@ describe('dependency injection', function() {
 			return this._dao.getStudents();
 		};
 
+		var T = injector.resolve(Teacher),
+			t = new T(1);
+		expect(t.toString()).toEqual('I am wwq');
+		expect(t.students().length).toBe(3);
 	});
 	it('all injected must at the end of arguments', function() {
 		injector.register('aaa');
