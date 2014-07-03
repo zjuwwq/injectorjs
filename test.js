@@ -49,6 +49,7 @@ keys({
 }); // ['name', 'age']
 
 // Depend on Class
+// depend on a object:$util and a instance of class:$$dao
 var fn = injector.resolve(function($util, $$dao) {
 	var names = [];
 	$util.each($$dao.getStudents(), function(student) {
@@ -65,7 +66,7 @@ injector.register('person', {
 	age: 30
 });
 
-// Teacher depend on a object:$person and a instance of class:$dao
+// Teacher depend on a object:$person and a instance of class:$$dao
 function Teacher(id, $person, $$dao) {
 	this._id = id;
 	this._person = $person;

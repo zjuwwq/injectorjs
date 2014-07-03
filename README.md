@@ -53,7 +53,7 @@ injector.register('dao', DAO);
 All dependencies must be at the end of the paramter list, which are prefixed with a dollar sign($).
 
 ### Depend on Object
-when resolve, inject the object
+when resolve, inject the object.
 
 ``` javascript
 var keys = injector.resolve(function(obj, $util) {
@@ -71,9 +71,10 @@ keys({
 ```
 
 ### Depend on Class(constructor)
-when resolve, inject the object that is instantiated by the class
+when resolve, inject the object that is instantiated with the class.Class is prefixed with two dollar signs($$).
 
 ``` javascript
+// depend on a object:$util and a instance of class:$$dao
 var fn = injector.resolve(function($util, $$dao) {
 	var names = [];
 	$util.each($$dao.getStudents(), function(student) {
@@ -92,7 +93,7 @@ injector.register('person', {
 	age: 30
 });
 
-// Teacher depend on a object:$person and a instance of class:$dao
+// Teacher depend on a object:$person and a instance of class:$$dao
 function Teacher(id, $person, $$dao) {
 	this._id = id;
 	this._person = $person;
