@@ -4,7 +4,7 @@ injectorjs
 a javascript dependency injection library
 
 ## Installtion
-Download:[Source]()
+Download:[Source](https://raw.githubusercontent.com/zjuwwq/injectorjs/master/injector.js) | [Minified](https://raw.githubusercontent.com/zjuwwq/injectorjs/master/injector.min.js)
 
 
 ## Case

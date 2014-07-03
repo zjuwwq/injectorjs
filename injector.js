@@ -3,9 +3,9 @@
 	if (typeof define === 'function' && define.amd) {
 		define(factory);
 	} else if (typeof module === 'object' && typeof exports === 'object' && module.exorts === exports) {
-		exports = factory();
+		module.exports = factory();
 	} else {
-		root.Injector = factory();
+		root.injector = factory();
 	}
 })(this, function() {
 	if (!Array.prototype.forEach) {

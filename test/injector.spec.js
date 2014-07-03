@@ -21,9 +21,9 @@ describe('dependency injection', function() {
 		}
 	};
 	it('method injection', function() {
-		Injector.register('util0', util0);
-		Injector.register('util1', util1);
-		var keys = Injector.resolve(function(obj, $util0, $util1) {
+		injector.register('util0', util0);
+		injector.register('util1', util1);
+		var keys = injector.resolve(function(obj, $util0, $util1) {
 			if (type(obj) !== 'Object') return;
 			var arr = [];
 			$util0.map(obj, function(p) {
@@ -56,11 +56,11 @@ describe('dependency injection', function() {
 		DAO.prototype.getStudents = function(grade) {
 			return this._data;
 		};
-		Injector.register('person', {
+		injector.register('person', {
 			name: 'wwq',
 			age: 30
 		});
-		Injector.register('dao', DAO);
+		injector.register('dao', DAO);
 
 		function Teacher(id, $person, $dao) {
 			this._id = id;
@@ -76,30 +76,30 @@ describe('dependency injection', function() {
 
 	});
 	it('all injected must at the end of arguments', function() {
-		Injector.register('aaa');
+		injector.register('aaa');
 
 		function fn() {
-			return Injector.resolve(function($aaa, b, c) {});
+			return injector.resolve(function($aaa, b, c) {});
 		}
 		expect(fn).toThrow();
 	});
 	it('throw error when inject argument which has not registered', function() {
 		function fn() {
-			var foo = Injector.resolve(function($bbb) {});
+			var foo = injector.resolve(function($bbb) {});
 			return foo();
 		}
 		expect(fn).toThrow();
 	});
 	it('explicitly injection', function() {
-		Injector.register('tom', {
+		injector.register('tom', {
 			name: 'tom',
 			age: 12
 		});
-		Injector.register('jack', {
+		injector.register('jack', {
 			name: 'jack',
 			age: 8
 		});
-		var foo = Injector.resolve(function foo(a, b, c) {
+		var foo = injector.resolve(function foo(a, b, c) {
 			return a + b.name + c.name;
 		});
 		foo.$injects = ['tom', 'jack'];
