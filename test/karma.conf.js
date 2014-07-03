@@ -6,7 +6,7 @@ module.exports = function(config) {
 		frameworks: ['jasmine'],
 		// list of files / patterns to load in the browser
 		files: [
-			'di.js',
+			'injector.js',
 			'test/*.spec.js'
 		],
 		// enable / disable watching file and executing tests whenever any file changes

@@ -1,11 +1,11 @@
 {
-  "name": "dependency injection",
+  "name": "injectorjs",
   "version": "0.0.1",
-  "description": "a angular dialog component",
-  "author": "https://github.com/zjuwwq/angular-ui-dialog/graphs/contributors",
+  "description": "a javascript dependency injection library",
+  "author": "https://github.com/zjuwwq/injectorjs/graphs/contributors",
   "license": "MIT",
-  "homepage": "https://github.com/zjuwwq/angular-ui-dialog",
-  "main": "./src/angular-ui-dialog.js",
+  "homepage": "https://github.com/zjuwwq/injectorjs",
+  "main": "./injector.js",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -14,13 +14,10 @@
     "test*",
     "demo*",
     "gruntFile.js",
-    "package.json"
+    "*.json"
   ],
   "dependencies": {
-    "angular": "~1.2.x"
   },
   "devDependencies": {
-    "angular-mocks": "~1.2.x",
-    "jquery": "~2.x"
   }
 }
