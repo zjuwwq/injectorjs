@@ -1,5 +1,5 @@
 {
-  "name": "injectorjs",
+  "name": "injector",
   "version": "0.0.1",
   "description": "a javascript dependency injection library",
   "author": "https://github.com/zjuwwq/injectorjs/graphs/contributors",
@@ -13,7 +13,7 @@
     "bower_components",
     "test*",
     "demo*",
-    "gruntFile.js",
+    "GruntFile.js",
     "*.json"
   ],
   "dependencies": {
