@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			scripts: {
-				files: ['injector.js'],
+				files: ['<%= pkg.name %>.js', 'package.json'],
 				tasks: ['uglify']
 			}
 		}
