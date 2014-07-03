@@ -1,6 +1,6 @@
 {
   "name": "injectorjs",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "a javascript dependency injection library",
   "author": "https://github.com/zjuwwq/injectorjs/graphs/contributors",
   "license": "MIT",

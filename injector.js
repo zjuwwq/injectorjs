@@ -17,9 +17,9 @@
 	}
 	var TYPE_REGEX = /\s+(\w+)\]$/,
 		COMMENT_REGEX = /\/\/.*$|\/\*[\s\S]*?\*\//mg,
-		ARGS_REGEX = /\(([\s\S]*?)\)/m;
-
-	var injectPrefix = '$';
+		ARGS_REGEX = /\(([\s\S]*?)\)/m,
+		INJECT_PREFIX = '$',
+		CLASS_PREFIX = '$';
 	var storage = {};
 	/**
 	 * 获取对象的类型
@@ -27,16 +27,18 @@
 	 * @return {String}     类型
 	 */
 	function type(obj) {
-		return Object.prototype.toString.call(obj).match(TYPE_REGEX)[1];
+		return Object.prototype.toString.call(obj).match(TYPE_REGEX)[1].toLowerCase();
 	}
 	/**
 	 * 解析名称（去除前缀）
 	 * @param  {String} name 名称
+	 * @param  {String} prefix 前缀
 	 * @return {String}      解析后的名称
 	 */
-	function resolveName(name) {
-		if (type(name) !== 'String') return;
-		return name.indexOf(injectPrefix) === 0 ? name.substring(injectPrefix.length) : name;
+	function resolveName(name, prefix) {
+		if (type(name) !== 'string') return;
+		prefix = prefix || '';
+		return name.indexOf(prefix) === 0 ? name.substring(prefix.length) : name;
 	}
 	/**
 	 * 注册对象
@@ -53,10 +55,10 @@
 	 * @return {Function}    解析后的函数
 	 */
 	function resolve(fn) {
-		if (type(fn) !== 'Function') return;
+		if (type(fn) !== 'function') return;
 		var fnStr = fn.toString().replace(COMMENT_REGEX, ''), //	去除注释
 			argStr = fnStr.match(ARGS_REGEX)[1].replace(/\s*/g, ''), //	获取参数
-			index = argStr.indexOf(injectPrefix),
+			index = argStr.indexOf(INJECT_PREFIX),
 			injectStr,
 			names,
 			$injects = [];
@@ -66,13 +68,13 @@
 			names = injectStr.split(',');
 			// 检查是否所有的注入对象都写在参数的尾部
 			for (var i = 0, name; name = names[i]; i++) {
-				if (name.indexOf(injectPrefix) !== 0) {
-					throw new Error('resolve failed: all injected must at the end of arguments');
+				if (name.indexOf(INJECT_PREFIX) !== 0) {
+					throw new Error('Resolve failed: all injected must at the end of arguments');
 				}
 			}
 
 			names.forEach(function(name) {
-				$injects.push(resolveName(name));
+				$injects.push(resolveName(name, INJECT_PREFIX));
 			});
 		}
 		// 解析后的函数
@@ -82,16 +84,25 @@
 				inject,
 				obj;
 			names.forEach(function(name) {
+				var isClass;
+				if(name.indexOf(CLASS_PREFIX) === 0){
+					// depend on class
+					isClass = 1;
+					name = resolveName(name, CLASS_PREFIX);
+				}
 				if (name in storage) {
-					inject = storage[resolveName(name)];
-					if (type(inject) === 'Function') {
+					inject = storage[name];
+					if (isClass) {
 						// 如果注册的是构造函数，实例化
-						obj = inject();
-						inject = type(obj) === 'Object' ? obj : new inject();
+						try{
+							inject = new inject();
+						}catch(e){
+							throw new Error('Resolve failed: ' + name + ' can\'t be instantiated' );
+						}
 					}
 					injects.push(inject);
 				} else {
-					throw new Error('resolve failed: ' + name + 'is not registered');
+					throw new Error('Resolve failed: ' + name + ' is not registered');
 				}
 			});
 
@@ -107,7 +118,8 @@
 		register: register,
 		resolve: resolve,
 		config: {
-			injectPrefix: injectPrefix
+			injectPrefix: INJECT_PREFIX,
+			classPrefix: CLASS_PREFIX
 		}
 	};
 });
