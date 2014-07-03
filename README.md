@@ -6,6 +6,9 @@ a javascript dependency injection library
 ## Installtion
 Download:[Source](https://raw.githubusercontent.com/zjuwwq/injectorjs/master/injector.js) | [Minified](https://raw.githubusercontent.com/zjuwwq/injectorjs/master/injector.min.js)
 
+Npm: `npm install injectorjs`
+
+Bower: `bower install injectorjs`
 
 ## Case
 ```
@@ -17,13 +20,5 @@ Download:[Source](https://raw.githubusercontent.com/zjuwwq/injectorjs/master/inj
 	nodes.length; 	// 2
 	nodes[1].tagName; // 'p'
 ```
-
-## Test
-Using [karma](http://karma-runner.github.io/) as test runner, [jasmine](http://jasmine.github.io/) for test case.
-### Prepare for test:
-```npm install```
-### To test:
-```npm test```
-
 ## [LICENSE](https://github.com/zjuwwq/injectorjs/blob/master/LICENSE)
 MIT
