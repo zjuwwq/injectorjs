@@ -2,7 +2,7 @@
 	'use strict';
 	if (typeof define === 'function' && define.amd) {
 		define(factory);
-	} else if (typeof module === 'object' && typeof exports === 'object' && module.exorts === exports) {
+	} else if (typeof module === 'object' && typeof exports === 'object' && module.exports === exports) {
 		module.exports = factory();
 	} else {
 		root.injector = factory();
