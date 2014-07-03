@@ -3,7 +3,7 @@
 	"title": "dependency injection",
 	"description": "a javascript dependency injection library",
 	"main": "injector.js",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"author": {
 		"name": "zjuwwq"
 	},
