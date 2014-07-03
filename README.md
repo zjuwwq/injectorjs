@@ -43,7 +43,6 @@ injector.register('dao', DAO);
 All dependencies must be at the end of the paramter list, which are prefixed with a dollar sign($).
 
 ### depend on object
-
 when resolve, inject the object
 
 ``` javascript
@@ -62,7 +61,6 @@ keys({
 ```
 
 ### depend on class(constructor)
-
 when resolve, inject the object that is instantiated by the class
 
 ``` javascript
@@ -81,8 +79,6 @@ keys({
 ```
 
 ## Constructor Injection
-When a Constructor depend on a Class(javascript Function), it inject a instance of the Class when resolve.
-
 ``` javascript
 // Constructor Injection
 injector.register('person', {
@@ -112,7 +108,7 @@ t.students(); // [{name: 'tom', age: 10}, {name: 'jimmy',age: 9}];
 
 ## Explicitly Injection
 After minification or obfuscation, the parameters were renamed.
-It can't detect the dependencies by the parameter name. We can declare dependencies explicityly by the ```$injects``` property.
+It can't detect the dependencies by the parameter name. We can declare dependencies explicitly by the ```$injects``` property.
 
 ```javascript
 injector.register('tom', {
