@@ -1,5 +1,5 @@
 {
-	"name": "injector",
+	"name": "injectorjs",
 	"title": "dependency injection",
 	"description": "a javascript dependency injection library",
 	"main": "injector.js",
