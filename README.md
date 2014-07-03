@@ -1,5 +1,4 @@
 # injectorjs
-===========
 a javascript dependency injection library
 
 # Installtion
