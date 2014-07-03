@@ -1,12 +1,8 @@
 describe('dependency injection', function() {
-	function type(obj) {
-		return Object.prototype.toString.call(obj).match(/\s+(\w+)\]/)[1];
-	}
-
 	// register object
-	var util = {
+	injector.register('util', {
 		map: function map(obj, cb) {
-			if (type(obj) !== 'Object' || type(cb) !== 'Function') return;
+			if (typeof obj !== 'object' || typeof cb !== 'function') return;
 			for (var p in obj) {
 				if (obj.hasOwnProperty(p)) {
 					cb(p, obj[p], obj);
@@ -14,13 +10,12 @@ describe('dependency injection', function() {
 			}
 		},
 		each: function(arr, cb) {
-			if (!arr || !arr.length || type(cb) !== 'Function') return;
+			if (!arr || !arr.length || typeof cb !== 'function') return;
 			for (var i = 0, length = arr.length; i < length; i++) {
 				cb(arr[i], i, arr);
 			}
 		}
-	};
-	injector.register('util', util);
+	});
 
 	// register class
 	function DAO() {
@@ -40,7 +35,7 @@ describe('dependency injection', function() {
 
 	it('Method injection', function() {
 		var keys = injector.resolve(function(obj, $util) {
-			if (type(obj) !== 'Object') return;
+			if (typeof obj  !== 'object') return;
 			var arr = [];
 			$util.map(obj, function(p) {
 				arr.push(p);
@@ -57,9 +52,9 @@ describe('dependency injection', function() {
 		})).toEqual('NAME,AGE');
 	});
 	it('inject class', function() {
-		var fn = injector.resolve(function($util, $$dao){
+		var fn = injector.resolve(function($util, $$dao) {
 			var names = [];
-			$util.each($$dao.getStudents(), function(student){
+			$util.each($$dao.getStudents(), function(student) {
 				names.push(student.name);
 			});
 			return names.join(',');
@@ -72,6 +67,7 @@ describe('dependency injection', function() {
 			name: 'wwq',
 			age: 30
 		});
+
 		function Teacher(id, $person, $$dao) {
 			this._id = id;
 			this._person = $person;
@@ -89,7 +85,7 @@ describe('dependency injection', function() {
 		expect(t.toString()).toEqual('I am wwq');
 		expect(t.students().length).toBe(2);
 	});
-	
+
 	it('explicitly injection', function() {
 		injector.register('tom', {
 			name: 'tom',
@@ -122,8 +118,9 @@ describe('dependency injection', function() {
 	});
 	it('throw error when depend on a class but register not', function() {
 		injector.register('bbb', 1);
+
 		function fn() {
-			var foo = function(b){};
+			var foo = function(b) {};
 			foo.$injects = ['$bbb'];
 			var foo1 = injector.resolve(foo);
 			return foo1();

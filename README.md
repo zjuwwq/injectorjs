@@ -10,20 +10,30 @@ Bower: `bower install injectorjs`
 
 # Getting Started
 ## Register a dependency
+### Register Object
 
 ```javascript
-// register a object
 injector.register('util', {
-	map: function(obj, cb) {
+	map: function map(obj, cb) {
 		if (typeof obj !== 'object' || typeof cb !== 'function') return;
 		for (var p in obj) {
 			if (obj.hasOwnProperty(p)) {
 				cb(p, obj[p], obj);
 			}
 		}
+	},
+	each: function(arr, cb) {
+		if (!arr || !arr.length || typeof cb !== 'function') return;
+		for (var i = 0, length = arr.length; i < length; i++) {
+			cb(arr[i], i, arr);
+		}
 	}
 });
+```
 
+### Register Class
+
+```javascript
 function DAO() {
 	this._data = [{
 		name: 'tom',
@@ -42,7 +52,7 @@ injector.register('dao', DAO);
 ## Method Injection
 All dependencies must be at the end of the paramter list, which are prefixed with a dollar sign($).
 
-### depend on object
+### Depend on Object
 when resolve, inject the object
 
 ``` javascript
@@ -60,27 +70,23 @@ keys({
 }); // ['name', 'age']
 ```
 
-### depend on class(constructor)
+### Depend on Class(constructor)
 when resolve, inject the object that is instantiated by the class
 
 ``` javascript
-var keys = injector.resolve(function(obj, $util) {
-	if (typeof obj !== 'object') return;
-	var arr = [];
-	$util.map(obj, function(p) {
-		arr.push(p);
+var fn = injector.resolve(function($util, $$dao) {
+	var names = [];
+	$util.each($$dao.getStudents(), function(student) {
+		names.push(student.name);
 	});
-	return arr;
+	return names.join(',');
 });
-keys({
-	name: 'wwq',
-	age: 30
-}); // ['name', 'age']
+fn(); // 'tom,jimmy'
 ```
 
 ## Constructor Injection
+
 ``` javascript
-// Constructor Injection
 injector.register('person', {
 	name: 'wwq',
 	age: 30
@@ -115,7 +121,7 @@ injector.register('tom', {
 	name: 'tom',
 	age: 12
 });
-injector.register('class', function(){
+injector.register('class', function() {
 	this.name = 'jack';
 });
 var foo = injector.resolve(function foo(a, b, c) {

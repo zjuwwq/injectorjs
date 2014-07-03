@@ -1,13 +1,19 @@
 var injector = require('./injector.js');
 // register
-// register a object
+// Register Object
 injector.register('util', {
-	map: function(obj, cb) {
+	map: function map(obj, cb) {
 		if (typeof obj !== 'object' || typeof cb !== 'function') return;
 		for (var p in obj) {
 			if (obj.hasOwnProperty(p)) {
 				cb(p, obj[p], obj);
 			}
+		}
+	},
+	each: function(arr, cb) {
+		if (!arr || !arr.length || typeof cb !== 'function') return;
+		for (var i = 0, length = arr.length; i < length; i++) {
+			cb(arr[i], i, arr);
 		}
 	}
 });
@@ -28,7 +34,7 @@ DAO.prototype.getStudents = function(grade) {
 injector.register('dao', DAO);
 
 // Method Injection
-// depend on object
+// Depend on Object
 var keys = injector.resolve(function(obj, $util) {
 	if (typeof obj !== 'object') return;
 	var arr = [];
@@ -41,6 +47,17 @@ keys({
 	name: 'wwq',
 	age: 30
 }); // ['name', 'age']
+
+// Depend on Class
+var fn = injector.resolve(function($util, $$dao) {
+	var names = [];
+	$util.each($$dao.getStudents(), function(student) {
+		names.push(student.name);
+	});
+	return names.join(',');
+});
+fn(); // 'tom,jimmy'
+
 
 // Constructor Injection
 injector.register('person', {
@@ -67,11 +84,12 @@ var T = injector.resolve(Teacher),
 t.toString(); //'I am wwq'
 t.students(); // [{name: 'tom', age: 10}, {name: 'jimmy',age: 9}];
 
+// Explicitly Injection
 injector.register('tom', {
 	name: 'tom',
 	age: 12
 });
-injector.register('class', function(){
+injector.register('class', function() {
 	this.name = 'jack';
 });
 var foo = injector.resolve(function foo(a, b, c) {
