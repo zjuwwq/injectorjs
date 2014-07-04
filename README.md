@@ -13,7 +13,7 @@ Bower: `bower install injectorjs`
 ### Register Object
 
 ```javascript
-injector.register('util', {
+Injector.register('util', {
 	map: function map(obj, cb) {
 		if (typeof obj !== 'object' || typeof cb !== 'function') return;
 		for (var p in obj) {
@@ -47,7 +47,7 @@ DAO.prototype.getStudents = function(grade) {
 	return this._data;
 };
 // register a class, which will be resolved to a instance of class.
-injector.register('dao', DAO);
+Injector.register('dao', DAO);
 ```
 ## Method Injection
 All dependencies must be at the end of the paramter list, which are prefixed with a dollar sign($).
@@ -56,7 +56,7 @@ All dependencies must be at the end of the paramter list, which are prefixed wit
 when resolve, inject the object.
 
 ``` javascript
-var keys = injector.resolve(function(obj, $util) {
+var keys = Injector.resolve(function(obj, $util) {
 	if (typeof obj !== 'object') return;
 	var arr = [];
 	$util.map(obj, function(p) {
@@ -75,7 +75,7 @@ when resolve, inject the object that is instantiated with the class.Class is pre
 
 ``` javascript
 // depend on a object:$util and a instance of class:$$dao
-var fn = injector.resolve(function($util, $$dao) {
+var fn = Injector.resolve(function($util, $$dao) {
 	var names = [];
 	$util.each($$dao.getStudents(), function(student) {
 		names.push(student.name);
@@ -88,7 +88,7 @@ fn(); // 'tom,jimmy'
 ## Constructor Injection
 
 ``` javascript
-injector.register('person', {
+Injector.register('person', {
 	name: 'wwq',
 	age: 30
 });
@@ -107,7 +107,7 @@ Teacher.prototype.students = function() {
 	return this._dao.getStudents();
 };
 
-var T = injector.resolve(Teacher),
+var T = Injector.resolve(Teacher),
 	t = new T(1);
 t.toString(); //'I am wwq'
 t.students(); // [{name: 'tom', age: 10}, {name: 'jimmy',age: 9}];
@@ -118,14 +118,14 @@ After minification or obfuscation, the parameters were renamed.
 It can't detect the dependencies by the parameter name. We can declare dependencies explicitly by the ```$injects``` property.
 
 ```javascript
-injector.register('tom', {
+Injector.register('tom', {
 	name: 'tom',
 	age: 12
 });
-injector.register('class', function() {
+Injector.register('class', function() {
 	this.name = 'jack';
 });
-var foo = injector.resolve(function foo(a, b, c) {
+var foo = Injector.resolve(function foo(a, b, c) {
 	return a + ',' + b.name + ',' + c.name;
 });
 foo.$injects = ['tom', '$class'];

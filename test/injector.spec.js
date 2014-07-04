@@ -1,6 +1,6 @@
 describe('dependency injection', function() {
 	// register object
-	injector.register('util', {
+	Injector.register('util', {
 		map: function map(obj, cb) {
 			if (typeof obj !== 'object' || typeof cb !== 'function') return;
 			for (var p in obj) {
@@ -30,11 +30,11 @@ describe('dependency injection', function() {
 	DAO.prototype.getStudents = function(grade) {
 		return this._data;
 	};
-	injector.register('dao', DAO);
+	Injector.register('dao', DAO);
 
 
 	it('Method injection', function() {
-		var keys = injector.resolve(function(obj, $util) {
+		var keys = Injector.resolve(function(obj, $util) {
 			if (typeof obj  !== 'object') return;
 			var arr = [];
 			$util.map(obj, function(p) {
@@ -52,7 +52,7 @@ describe('dependency injection', function() {
 		})).toEqual('NAME,AGE');
 	});
 	it('inject class', function() {
-		var fn = injector.resolve(function($util, $$dao) {
+		var fn = Injector.resolve(function($util, $$dao) {
 			var names = [];
 			$util.each($$dao.getStudents(), function(student) {
 				names.push(student.name);
@@ -63,7 +63,7 @@ describe('dependency injection', function() {
 	});
 	it('Constructor injection', function() {
 
-		injector.register('person', {
+		Injector.register('person', {
 			name: 'wwq',
 			age: 30
 		});
@@ -80,49 +80,49 @@ describe('dependency injection', function() {
 			return this._dao.getStudents();
 		};
 
-		var T = injector.resolve(Teacher),
+		var T = Injector.resolve(Teacher),
 			t = new T(1);
 		expect(t.toString()).toEqual('I am wwq');
 		expect(t.students().length).toBe(2);
 	});
 
 	it('explicitly injection', function() {
-		injector.register('tom', {
+		Injector.register('tom', {
 			name: 'tom',
 			age: 12
 		});
-		injector.register('jack', {
+		Injector.register('jack', {
 			name: 'jack',
 			age: 8
 		});
-		var foo = injector.resolve(function foo(a, b, c) {
+		var foo = Injector.resolve(function foo(a, b, c) {
 			return a + b.name + c.name;
 		});
 		foo.$injects = ['tom', 'jack'];
 		expect(foo('a')).toEqual('atomjack');
 	});
 	it('all injected must at the end of arguments', function() {
-		injector.register('aaa');
+		Injector.register('aaa');
 
 		function fn() {
-			return injector.resolve(function($aaa, b, c) {});
+			return Injector.resolve(function($aaa, b, c) {});
 		}
 		expect(fn).toThrow();
 	});
 	it('throw error when inject argument which has not registered', function() {
 		function fn() {
-			var foo = injector.resolve(function($bbb) {});
+			var foo = Injector.resolve(function($bbb) {});
 			return foo();
 		}
 		expect(fn).toThrow();
 	});
 	it('throw error when depend on a class but register not', function() {
-		injector.register('bbb', 1);
+		Injector.register('bbb', 1);
 
 		function fn() {
 			var foo = function(b) {};
 			foo.$injects = ['$bbb'];
-			var foo1 = injector.resolve(foo);
+			var foo1 = Injector.resolve(foo);
 			return foo1();
 		}
 		expect(fn).toThrow();

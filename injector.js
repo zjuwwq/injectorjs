@@ -5,7 +5,7 @@
 	} else if (typeof module === 'object' && typeof exports === 'object' && module.exports === exports) {
 		module.exports = factory();
 	} else {
-		root.injector = factory();
+		root.Injector = factory();
 	}
 })(this, function() {
 	if (!Array.prototype.forEach) {
@@ -56,9 +56,11 @@
 	 */
 	function resolve(fn) {
 		if (type(fn) !== 'function') return;
-		var fnStr = fn.toString().replace(COMMENT_REGEX, ''), //	去除注释
+		var injectPrefix = this.config.injectPrefix || INJECT_PREFIX,
+			classPrefix = this.config.classPrefix || CLASS_PREFIX,
+			fnStr = fn.toString().replace(COMMENT_REGEX, ''), //	去除注释
 			argStr = fnStr.match(ARGS_REGEX)[1].replace(/\s*/g, ''), //	获取参数
-			index = argStr.indexOf(INJECT_PREFIX),
+			index = argStr.indexOf(injectPrefix),
 			injectStr,
 			names,
 			$injects = [];
@@ -68,13 +70,13 @@
 			names = injectStr.split(',');
 			// 检查是否所有的注入对象都写在参数的尾部
 			for (var i = 0, name; name = names[i]; i++) {
-				if (name.indexOf(INJECT_PREFIX) !== 0) {
+				if (name.indexOf(injectPrefix) !== 0) {
 					throw new Error('Resolve failed: all injected must at the end of arguments');
 				}
 			}
 
 			names.forEach(function(name) {
-				$injects.push(resolveName(name, INJECT_PREFIX));
+				$injects.push(resolveName(name, injectPrefix));
 			});
 		}
 		// 解析后的函数
@@ -85,10 +87,10 @@
 				obj;
 			names.forEach(function(name) {
 				var isClass;
-				if(name.indexOf(CLASS_PREFIX) === 0){
+				if(name.indexOf(classPrefix) === 0){
 					// depend on class
 					isClass = 1;
-					name = resolveName(name, CLASS_PREFIX);
+					name = resolveName(name, classPrefix);
 				}
 				if (name in storage) {
 					inject = storage[name];
