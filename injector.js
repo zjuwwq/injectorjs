@@ -22,18 +22,18 @@
 		CLASS_PREFIX = '$';
 	var storage = {};
 	/**
-	 * 获取对象的类型
-	 * @param  {Object} obj 对象
-	 * @return {String}     类型
+	 * get the type of a object
+	 * @param  {Object} obj object
+	 * @return {String}     the type of object
 	 */
 	function type(obj) {
 		return Object.prototype.toString.call(obj).match(TYPE_REGEX)[1].toLowerCase();
 	}
 	/**
-	 * 解析名称（去除前缀）
-	 * @param  {String} name 名称
-	 * @param  {String} prefix 前缀
-	 * @return {String}      解析后的名称
+	 * resolve the name（delete the prefix）
+	 * @param  {String} name
+	 * @param  {String} prefix
+	 * @return {String}
 	 */
 	function resolveName(name, prefix) {
 		if (type(name) !== 'string') return;
@@ -41,18 +41,18 @@
 		return name.indexOf(prefix) === 0 ? name.substring(prefix.length) : name;
 	}
 	/**
-	 * 注册对象
-	 * @param  {String} name 名称
-	 * @param  {Object} obj  对象
+	 * register a object
+	 * @param  {String} name
+	 * @param  {Object} obj
 	 * @return {Void}
 	 */
 	function register(name, obj) {
 		storage[name] = obj;
 	}
 	/**
-	 * 解析函数(类)，注入对象
-	 * @param  {Function} fn 函数
-	 * @return {Function}    解析后的函数
+	 * resolve function(class)，inject the dependencies
+	 * @param  {Function} fn function
+	 * @return {Function}    the function which has injected
 	 */
 	function resolve(fn) {
 		if (type(fn) !== 'function') return;
@@ -66,9 +66,9 @@
 			$injects = [];
 			
 		if (index !== -1) {
-			injectStr = argStr.substring(index); //	获取需要注入的参数
+			injectStr = argStr.substring(index); //	get the parameters with inject prefix
 			names = injectStr.split(',');
-			// 检查是否所有的注入对象都写在参数的尾部
+			// check if all injected is at the end of arguments
 			for (var i = 0, name; name = names[i]; i++) {
 				if (name.indexOf(injectPrefix) !== 0) {
 					throw new Error('Resolve failed: all injected must at the end of arguments');
@@ -79,7 +79,7 @@
 				$injects.push(resolveName(name, injectPrefix));
 			});
 		}
-		// 解析后的函数
+		// the resolved function
 		function injectedFn() {
 			var names = injectedFn.$injects || [],
 				injects = [],
@@ -95,7 +95,7 @@
 				if (name in storage) {
 					inject = storage[name];
 					if (isClass) {
-						// 如果注册的是构造函数，实例化
+						// if the registered object is constructor, instantiate
 						try{
 							inject = new inject();
 						}catch(e){
